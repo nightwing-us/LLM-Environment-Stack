@@ -1,0 +1,30 @@
+services:
+  # Chat UI/UX accessible through a browser
+  open-webui:
+    image: ${OPEN_WEBUI_VERSION}
+    container_name: open-webui
+    restart: unless-stopped
+#    ports:
+#      - 80:8080
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    environment:
+      OPENAI_API_BASE_URLS: ${OPENAI_API_BASE_URL:-http://litellm:8000/v1}
+      OPENAI_API_KEYS: ${OPENAI_API_KEY:-${LITELLM_MASTER_KEY}}
+    volumes:
+      - open-webui:/app/backend/data
+    labels:
+      - traefik.enable=true
+
+      # Redirect from HTTPS entrypoint to this service
+      - traefik.http.routers.open-webui_https.entrypoints=websecure
+      - traefik.http.routers.open-webui_https.rule=HostRegexp(`^.+$`)
+      - traefik.http.routers.open-webui_https.tls=true
+      - traefik.http.services.open-webui.loadbalancer.server.port=8080
+
+
+volumes:
+  open-webui:
+

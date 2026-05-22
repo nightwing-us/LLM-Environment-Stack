@@ -1,0 +1,24 @@
+LLM Environment Stack
+Copyright 2026 Nightwing Group, LLC
+
+Licensed under the Apache License, Version 2.0 (the "License").
+See LICENSE for the full license text.
+
+---
+
+This project orchestrates and bundles configuration for the following
+third-party components, each distributed under its own license:
+
+- LiteLLM            (https://github.com/BerriAI/litellm)         — MIT
+- vLLM               (https://github.com/vllm-project/vllm)       — Apache-2.0
+- Open WebUI         (https://github.com/open-webui/open-webui)   — see upstream
+- Traefik            (https://github.com/traefik/traefik)         — MIT
+- Prometheus         (https://github.com/prometheus/prometheus)   — Apache-2.0
+- Grafana            (https://github.com/grafana/grafana)         — AGPL-3.0
+- PostgreSQL         (https://www.postgresql.org/)                — PostgreSQL License
+- Portainer CE       (https://github.com/portainer/portainer)     — zlib
+- Langfuse Python    (https://github.com/langfuse/langfuse-python)— MIT
+
+The Open WebUI plugin code under modules/webui/webui_functions/
+(langfuse_integration.py and langfuse_v3_integration.py) is derived from
+upstream Open WebUI examples and retains its MIT attribution headers.

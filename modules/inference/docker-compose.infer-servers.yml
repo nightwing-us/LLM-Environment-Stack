@@ -1,0 +1,45 @@
+x-app: &vllm_defaults
+  image: ${VLLM_VERSION}
+  restart: unless-stopped
+  tty: true
+  ipc: host
+  environment:
+    VLLM_NO_USAGE_STATS: 1
+    HF_TOKEN: ${HF_TOKEN:-}
+  volumes:
+    - ~/.cache/huggingface/hub/:/vllm-workspace/models/
+    - ~/.cache/huggingface/hub/:/root/.cache/huggingface/hub/
+    - ~/.cache/harmony/:/tmp/tiktoken-rs-cache
+
+
+services:
+  # Inference server that runs the model
+  vllm:
+    <<: *vllm_defaults
+    container_name: vllm
+    command: >
+      --model=openai/gpt-oss-120b
+      --served-model-name=gpt-oss-120b
+
+      --gpu-memory-utilization=0.95
+
+      --tool-call-parser=openai
+      --reasoning-parser=openai_gptoss
+      --enable-auto-tool-choice
+
+      --kv-cache-dtype=auto
+
+      --async-scheduling
+      --no-enable-prefix-caching
+
+      --max-cudagraph-capture-size=2048
+      --max-num-batched-tokens=8192
+#    ports:
+#      - 8000:8000
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ "0" ]
+              capabilities: [ gpu ]

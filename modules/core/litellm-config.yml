@@ -1,0 +1,6 @@
+model_list:
+- litellm_params:
+    api_base: http://vllm:8000/v1
+    api_key: LiteLLM
+    model: openai/gpt-oss-120b
+  model_name: gpt-oss-120b

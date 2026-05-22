@@ -1,0 +1,2 @@
+# Replace this file with your TLS certificate, renamed to `certfile.crt`.
+# The real `certfile.crt` is gitignored — it will not be committed.

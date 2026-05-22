@@ -1,0 +1,18 @@
+services:
+  # UI for easily managing Docker containers
+  portainer:
+    image: portainer/portainer-ce:2.21.4
+    container_name: portainer
+    restart: always
+    profiles:
+      - dev
+    ports:
+      - 8180:8000  # Edge agent connection
+      - 9443:9443  # HTTPS for the web UI
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+
+
+volumes:
+  portainer-data:

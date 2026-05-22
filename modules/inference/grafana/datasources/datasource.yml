@@ -1,0 +1,8 @@
+apiVersion: 1
+
+datasources:
+  - name: prometheus-vllm
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    uid: de39g4q5rng1sf

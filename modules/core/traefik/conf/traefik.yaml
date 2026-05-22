@@ -1,0 +1,39 @@
+global:
+  checkNewVersion: false
+  sendanonymoususage: false
+
+log:
+  level: WARN
+  filepath: /root/logs/traefik.log
+
+api:
+  insecure: true # <CHANGEME> (set to false and configure dashboard auth for production)
+  dashboard: true
+
+providers:
+  docker:
+    exposedByDefault: false
+    watch: true
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+
+  websecure:
+    address: :443
+
+  litellm:
+    address: :8000
+    http:
+      redirections:
+        entryPoint:
+          scheme: https

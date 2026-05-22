@@ -1,0 +1,3 @@
+# Local environment files — copied from *.env.example by install.sh
+.env
+modules/*/.env

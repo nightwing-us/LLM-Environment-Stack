@@ -1,0 +1,11 @@
+name: llm-environment
+
+include:
+  - modules/core/docker-compose.yml
+  - modules/inference/docker-compose.yml
+  - modules/webui/docker-compose.yml
+
+networks:
+  default:
+    name: llm-environment
+

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Block real .env files and TLS cert/key files from being committed.
+# Only the *.example templates should ever be tracked.
+
+violations=$(git diff --cached --name-only --diff-filter=AM --no-renames \
+    | grep -E '(^|/)\.env$|/certfile\.crt$|/keyfile\.key$' || true)
+
+if [ -n "$violations" ]; then
+    echo "ERROR: refusing to commit sensitive files:"
+    echo "$violations" | sed 's/^/  /'
+    echo ""
+    echo "Real .env and TLS cert/key files must not be tracked."
+    echo "Commit the matching .example template instead."
+    exit 1
+fi
+
+exit 0

@@ -1,0 +1,38 @@
+include:
+  - docker-compose.infer-servers.yml
+
+services:
+  # Service for displaying inference server metrics (e.g., throughput, tokens/sec, etc.)
+  grafana:
+    image: ${GRAFANA_VERSION}
+    container_name: grafana
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - grafana-storage:/var/lib/grafana
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.grafana_https.entrypoints=websecure
+      - traefik.http.routers.grafana_https.rule=HostRegexp(`^grafana\..+$`)
+      - traefik.http.routers.grafana_https.tls=true
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+
+
+  # Service that provides metrics from vLLM to Grafana
+  prometheus:
+    image: ${PROMETHEUS_VERSION}
+    container_name: prometheus
+    restart: unless-stopped
+    # ports:
+    #   - 9090:9090
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+volumes:
+  grafana-storage:
